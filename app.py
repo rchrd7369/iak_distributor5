@@ -1,12 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, session
 import firebase_admin
 from firebase_admin import credentials, firestore
-import pandas as pd
 from datetime import datetime
 
-
 # Inisialisasi Firebase Admin SDK
-cred = credentials.Certificate("E:/College/Semester7/IAK/UTS/ladju_distributor.json")
+cred = credentials.Certificate("ladju_distributor.json")
 firebase_admin.initialize_app(cred)
 
 # Firestore database instance
@@ -14,7 +12,6 @@ db = firestore.client()
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Kunci rahasia untuk sesi flash
-
 
 # Fungsi untuk mengecek validitas login menggunakan Firestore
 def check_login(username, password):
@@ -202,7 +199,6 @@ def confirm_pesanan():
 
     return jsonify({'status': 'error', 'message': 'Pesanan tidak ditemukan.'}), 404
 
-
 # Route untuk memperbarui status ongkos kirim
 @app.route('/update_status', methods=['POST'])
 def update_status():
@@ -229,7 +225,6 @@ def update_status():
                 db.collection('tb_ongkos_kirim').document(doc_id).delete()
 
     return redirect(url_for('admin'))
-
 
 @app.route('/admin')
 def admin():
@@ -321,5 +316,5 @@ def get_status(id_resi):
 def about():
     return render_template('about.html')
 
-if __name__ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)
