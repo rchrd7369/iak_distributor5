@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 # Inisialisasi Firebase Admin SDK
-cred = credentials.Certificate("E:/College/Semester7/IAK/UTS/ladju_distributor.json")
+cred = credentials.Certificate("ladju_distributor.json")
 firebase_admin.initialize_app(cred)
 
 # Firestore database instance
