@@ -72,28 +72,28 @@ def logout():
 # Route untuk cek harga oleh supplier
 @app.route('/api/distributor5/orders/cek_ongkir', methods=['POST'])
 def cek_harga():
-    data = request.get_json()  # Menerima data dalam format JSON
-    kota_tujuan = data.get('kota_tujuan')
-    kota_asal = data.get('kota_asal')
-    berat = float(data.get('berat', 0))
-    id_log = data.get('id_log')
-
-    # Perhitungan ongkos kirim berdasarkan jarak dan berat
-    JARAK_KOTA = get_jarak_kota()
-    LAMA_PENGIRIMAN = get_lama_pengiriman()
-
-    jarak = JARAK_KOTA.get((kota_tujuan.lower(), kota_asal.lower()), 0)
-    ongkos_kirim = (jarak * 500) + (berat * 1000)
-
-    lama_pengiriman = LAMA_PENGIRIMAN.get((kota_tujuan.lower(), kota_asal.lower()), 'Tidak diketahui')
-
-    if jarak == 0:
-        return {'status': 'error', 'message': 'Kombinasi kota tujuan dan kota asal tidak ditemukan.'}, 400
-
-    # Generate ID berdasarkan id_log
-    new_id = f'LOGDISS{id_log}'
-
     try:
+        data = request.get_json()  # Menerima data dalam format JSON
+        kota_tujuan = data.get('kota_tujuan')
+        kota_asal = data.get('kota_asal')
+        berat = float(data.get('berat', 0))
+        id_log = data.get('id_log')
+
+        # Perhitungan ongkos kirim berdasarkan jarak dan berat
+        JARAK_KOTA = get_jarak_kota()
+        LAMA_PENGIRIMAN = get_lama_pengiriman()
+
+        jarak = JARAK_KOTA.get((kota_tujuan.lower(), kota_asal.lower()), 0)
+        ongkos_kirim = (jarak * 500) + (berat * 1000)
+
+        lama_pengiriman = LAMA_PENGIRIMAN.get((kota_tujuan.lower(), kota_asal.lower()), 'Tidak diketahui')
+
+        if jarak == 0:
+            return {'status': 'error', 'message': 'Kombinasi kota tujuan dan kota asal tidak ditemukan.'}, 400
+
+        # Generate ID berdasarkan id_log
+        new_id = f'LOGDISS{id_log}'
+
         # Simpan data pesanan ke Firestore collection 'tb_pesanan'
         db.collection('tb_pesanan').document(new_id).set({
             'kota_tujuan': kota_tujuan,
@@ -103,66 +103,66 @@ def cek_harga():
             'id_log': id_log,
             'status': 'Menunggu Konfirmasi'
         })
-    except Exception as e:
-        print(f"Error saving order: {e}")
-        return {'status': 'error', 'message': 'Gagal menyimpan pesanan.'}, 500
 
-    # Kembalikan hasil perhitungan ongkos kirim sebagai response
-    return jsonify({
-        'status': 'success',
-        'harga_pengiriman': ongkos_kirim,
-        'jarak': jarak,
-        'id_log': id_log,
-        'lama_pengiriman': lama_pengiriman
-    })
+        # Kembalikan hasil perhitungan ongkos kirim sebagai response
+        return jsonify({
+            'status': 'success',
+            'harga_pengiriman': ongkos_kirim,
+            'jarak': jarak,
+            'id_log': id_log,
+            'lama_pengiriman': lama_pengiriman
+        })
+    except Exception as e:
+        print(f"Error in cek_harga: {e}")
+        return {'status': 'error', 'message': 'Terjadi kesalahan saat menghitung ongkos kirim.'}, 500
 
 # Route untuk konfirmasi pesanan dan menyimpannya ke 'tb_ongkos_kirim'
 @app.route('/api/distributor5/orders/fix_kirim', methods=['POST'])
 def confirm_pesanan():
-    data = request.get_json()  # Menerima data JSON
-    id_log = data.get('id_log')
-    pesanan_id = f'LOGDISS{id_log}'
-    
-    # Ambil data dari tb_pesanan berdasarkan id_log
-    pesanan_doc = db.collection('tb_pesanan').document(pesanan_id).get()
+    try:
+        data = request.get_json()  # Menerima data JSON
+        id_log = data.get('id_log')
+        pesanan_id = f'LOGDISS{id_log}'
+        
+        # Ambil data dari tb_pesanan berdasarkan id_log
+        pesanan_doc = db.collection('tb_pesanan').document(pesanan_id).get()
 
-    if pesanan_doc.exists:
-        pesanan_data = pesanan_doc.to_dict()
+        if pesanan_doc.exists:
+            pesanan_data = pesanan_doc.to_dict()
 
-        kota_tujuan = pesanan_data['kota_tujuan']
-        kota_asal = pesanan_data['kota_asal']
-        berat = pesanan_data['berat']
-        quantity = pesanan_data['quantity']
+            kota_tujuan = pesanan_data['kota_tujuan']
+            kota_asal = pesanan_data['kota_asal']
+            berat = pesanan_data['berat']
+            quantity = pesanan_data['quantity']
 
-        # Perhitungan ongkos kirim berdasarkan jarak dan berat
-        JARAK_KOTA = get_jarak_kota()
-        LAMA_PENGIRIMAN = get_lama_pengiriman()
+            # Perhitungan ongkos kirim berdasarkan jarak dan berat
+            JARAK_KOTA = get_jarak_kota()
+            LAMA_PENGIRIMAN = get_lama_pengiriman()
 
-        jarak = JARAK_KOTA.get((kota_tujuan.lower(), kota_asal.lower()), 0)
-        ongkos_kirim = (jarak * 500) + (berat * 1000)
-        lama_pengiriman = LAMA_PENGIRIMAN.get((kota_tujuan.lower(), kota_asal.lower()), 'Tidak diketahui')
+            jarak = JARAK_KOTA.get((kota_tujuan.lower(), kota_asal.lower()), 0)
+            ongkos_kirim = (jarak * 500) + (berat * 1000)
+            lama_pengiriman = LAMA_PENGIRIMAN.get((kota_tujuan.lower(), kota_asal.lower()), 'Tidak diketahui')
 
-        if jarak == 0:
-            return jsonify({'status': 'error', 'message': 'Kombinasi kota tujuan dan kota asal tidak ditemukan.'}), 400
+            if jarak == 0:
+                return jsonify({'status': 'error', 'message': 'Kombinasi kota tujuan dan kota asal tidak ditemukan.'}), 400
 
-        # Mapping kode kota
-        supplier_codes = {'madura': 'S01', 'solo': 'S02', 'batam': 'S03'}
-        retail_codes = {'ngawi': 'R01', 'denpasar': 'R02', 'surabaya': 'R03'}
+            # Mapping kode kota
+            supplier_codes = {'madura': 'S01', 'solo': 'S02', 'batam': 'S03'}
+            retail_codes = {'ngawi': 'R01', 'denpasar': 'R02', 'surabaya': 'R03'}
 
-        supplier_code = supplier_codes.get(kota_asal.lower(), 'S00')
-        retail_code = retail_codes.get(kota_tujuan.lower(), 'R00')
+            supplier_code = supplier_codes.get(kota_asal.lower(), 'S00')
+            retail_code = retail_codes.get(kota_tujuan.lower(), 'R00')
 
-        # Generate id_resi
-        existing_resi = db.collection('tb_ongkos_kirim').where('kota_tujuan', '==', kota_tujuan)\
-            .where('kota_asal', '==', kota_asal).stream()
+            # Generate id_resi
+            existing_resi = db.collection('tb_ongkos_kirim').where('kota_tujuan', '==', kota_tujuan)\
+                .where('kota_asal', '==', kota_asal).stream()
 
-        pk_count = sum(1 for _ in existing_resi) + 1
-        no_resi = f'LES{supplier_code}{retail_code}PK{str(pk_count).zfill(3)}'
+            pk_count = sum(1 for _ in existing_resi) + 1
+            no_resi = f'LES{supplier_code}{retail_code}PK{str(pk_count).zfill(3)}'
 
-        # Generate tanggal pembelian
-        tanggal_pembelian = datetime.now().strftime('%Y-%m-%d')
+            # Generate tanggal pembelian
+            tanggal_pembelian = datetime.now().strftime('%Y-%m-%d')
 
-        try:
             # Simpan data ke 'tb_ongkos_kirim'
             new_ongkos_id = f'LOGDIS{str(id_log).zfill(5)}'
             db.collection('tb_ongkos_kirim').document(new_ongkos_id).set({
@@ -180,20 +180,20 @@ def confirm_pesanan():
 
             # Hapus pesanan dari 'tb_pesanan'
             db.collection('tb_pesanan').document(pesanan_id).delete()
-        except Exception as e:
-            print(f"Error confirming order: {e}")
-            return jsonify({'status': 'error', 'message': 'Gagal mengonfirmasi pesanan.'}), 500
 
-        # Kembalikan response ke supplier
-        return jsonify({
-            'status': 'success',
-            'harga_pengiriman': ongkos_kirim,
-            'no_resi': no_resi,
-            'tanggal_pembelian': tanggal_pembelian,
-            'lama_pengiriman': lama_pengiriman
-        })
+            # Kembalikan response ke supplier
+            return jsonify({
+                'status': 'success',
+                'harga_pengiriman': ongkos_kirim,
+                'no_resi': no_resi,
+                'tanggal_pembelian': tanggal_pembelian,
+                'lama_pengiriman': lama_pengiriman
+            })
 
-    return jsonify({'status': 'error', 'message': 'Pesanan tidak ditemukan.'}), 404
+        return jsonify({'status': 'error', 'message': 'Pesanan tidak ditemukan.'}), 404
+    except Exception as e:
+        print(f"Error in confirm_pesanan: {e}")
+        return jsonify({'status': 'error', 'message': 'Terjadi kesalahan saat mengonfirmasi pesanan.'}), 500
 
 # Route untuk memperbarui status ongkos kirim
 @app.route('/update_status', methods=['POST'])
@@ -222,7 +222,7 @@ def update_status():
         else:
             flash('Dokumen tidak ditemukan.', 'danger')
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error in update_status: {e}")
         flash('Terjadi kesalahan saat memperbarui status.', 'danger')
 
     return redirect(url_for('admin'))
