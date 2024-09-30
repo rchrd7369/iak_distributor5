@@ -5,65 +5,42 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,700,900|Display+Playfair:200,300,400,700"> 
-        <link rel="stylesheet" href="static/fonts/icomoon/style.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='fonts/icomoon/style.css') }}">
 
-        <link rel="stylesheet" href="static/css/bootstrap.min.css">
-        <link rel="stylesheet" href="static/css/magnific-popup.css">
-        <link rel="stylesheet" href="static/css/jquery-ui.css">
-        <link rel="stylesheet" href="static/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
 
-        <link rel="stylesheet" href="static/css/owl.theme.default.min.css">
-        <link rel="stylesheet" href="static/css/bootstrap-datepicker.css">
-        <link rel="stylesheet" href="static/fonts/flaticon/font/flaticon.css">
-        <link rel="stylesheet" href="static/css/aos.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datepicker.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='fonts/flaticon/font/flaticon.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/aos.css') }}">
 
-        <link rel="stylesheet" href="static/css/style.css">
-
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
         <style>
             /* Tambahkan CSS untuk membuat tabel tidak terpotong */
-
             .table-container {
                 width: 100%;
                 overflow-x: auto; /* Tabel bisa di-scroll horizontal jika terlalu lebar */
             }
 
             .table {
-
-                min-width: 1150px; /* Ukuran minimal agar tabel lebar */
+                width: 100%; /* Ukuran tabel memanfaatkan seluruh lebar halaman */
+                table-layout: fixed; /* Membuat kolom tabel memiliki lebar tetap */
             }
 
             /* Set lebar kolom agar lebih seimbang */
             .table th, .table td {
                 padding: 10px;
                 text-align: left;
+                word-wrap: break-word; /* Membuat teks dalam kolom bisa terpotong dan pindah baris */
             }
 
             /* Menambah responsivitas pada perangkat mobile */
             @media (max-width: 768px) {
-
                 .table {
-                    font-size: 12px;
-                }
-            }
-
-            .table1 {
-                min-width: 10px; /* Ukuran minimal agar tabel lebar */
-
-            }
-
-            /* Set lebar kolom agar lebih seimbang */
-            .table1 th, .table1 td {
-                
-
-                padding: 10px;
-                text-align: left;
-            }
-
-            /* Menambah responsivitas pada perangkat mobile */
-            @media (max-width: 768px) {
-
-                .table1 {
                     font-size: 12px;
                 }
             }
@@ -78,7 +55,6 @@
                 cursor: pointer;
             }
 
-
             .blue-btn:hover {
                 background-color: #0056b3;  /* Warna biru yang lebih gelap saat di-hover */
             }
@@ -89,19 +65,13 @@
                 border: none;
                 padding: 8px 16px;
                 text-transform: uppercase;
-
                 font-weight: bold;
-
                 cursor: pointer;
-
             }
-
 
             .red-btn:hover {
-
                 background-color: rgb(240, 68, 68);  /* Warna biru yang lebih gelap saat di-hover */
             }
-
         </style>
     </head>
     <body>
@@ -110,7 +80,6 @@
 
         <!-- Mobile Menu -->
         <div class="site-mobile-menu">
-
             <div class="site-mobile-menu-header">
                 <div class="site-mobile-menu-close mt-3">
                     <span class="icon-close2 js-menu-toggle"></span>
@@ -120,42 +89,31 @@
         </div>
 
         <!-- Header -->
-
         <header class="site-navbar py-3" role="banner">
             <div class="container">
                 <div class="row align-items-center">
-
                     <div class="col-11 col-xl-2">
-
                         <h1 class="mb-0"><a href="{{ url_for('admin') }}" class="text-white h2 mb-0">Ladju</a></h1>
-
                     </div>
                     <div class="col-12 col-md-10 d-none d-xl-block">
-
                         <nav class="site-navigation position-relative text-right" role="navigation">
                             <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
                                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
-
                             </ul>
-
                         </nav>
                     </div>
-
                     <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;">
-
                         <a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a>
                     </div>
                 </div>
             </div>
-
         </header>
 
         <!-- Hero Section (Track Order) -->
-        <div class="site-blocks-cover inner-page-cover overlay" style="background-image: url(static/images/hero_bg_1.jpg);" data-aos="fade" data-stellar-background-ratio="0.5">
+        <div class="site-blocks-cover inner-page-cover overlay" style="background-image: url({{ url_for('static', filename='images/hero_bg_1.jpg') }});" data-aos="fade" data-stellar-background-ratio="0.5">
             <div class="container">
                 <div class="row align-items-center justify-content-center text-center">
                     <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">
-
                         <h1 class="text-white font-weight-light text-uppercase font-weight-bold">Ladju Express</h1>
                         <p class="text-white">Track your order easily</p>
                     </div>
@@ -184,7 +142,6 @@
                             <thead class="thead-custom">
                                 <tr>
                                     <th>ID</th>
-
                                     <th>Kota Tujuan</th>
                                     <th>Kota Asal</th>
                                     <th>Berat</th>
@@ -197,28 +154,20 @@
                                     <td>{{ pesanan.kota_tujuan }}</td>
                                     <td>{{ pesanan.kota_asal }}</td>
                                     <td>{{ pesanan.berat }}</td>
-
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
-
                     </div>
-
                 </div>
 
                 <!-- Data Pengiriman Section -->
                 <div class="data-section" id="pengiriman-section">
-
                     <h3>Data Pengiriman</h3>
-
                     <div class="table-responsive">
-
                         <table class="table table-bordered table-hover">
-
                             <thead class="thead-custom">
                                 <tr>
-
                                     <th>ID</th>
                                     <th>No Resi</th>
                                     <th>Kota Tujuan</th>
@@ -227,7 +176,6 @@
                                     <th>Tanggal Pembelian</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -235,42 +183,32 @@
                                 <tr>
                                     <td>{{ ongkos.new_id }}</td>
                                     <td>{{ ongkos.no_resi }}</td>
-
                                     <td>{{ ongkos.kota_tujuan }}</td>
                                     <td>{{ ongkos.kota_asal }}</td>
-                                    <td>{{ ongkos.harga_pengiriman }}</td>
-
+                                    <td>{{ format_harga(ongkos.harga_pengiriman) }}</td>
                                     <td>{{ ongkos.tanggal_pembelian }}</td>
                                     <td>{{ ongkos.status }}</td>
                                     <td>
                                         <form action="{{ url_for('update_status') }}" method="POST">
                                             <input type="hidden" name="doc_id" value="{{ ongkos.new_id }}">
-
                                             <select name="status" class="form-control">
                                                 {% for status in status_list %}
                                                 <option value="{{ status }}" {% if status == ongkos.status %}selected{% endif %}>{{ status }}</option>
                                                 {% endfor %}
                                             </select>
-
                                             <button type="submit" class="btn btn-update mt-2 blue-btn">Update</button>
-
                                         </form>
                                     </td>
-
                                 </tr>
-
                                 {% endfor %}
-
                             </tbody>
                         </table>
                     </div>
-
                 </div>                
 
                 <!-- Histori Pemesanan Section -->
                 <div class="data-section" id="histori-section">
                     <h3>Histori Pemesanan</h3>
-
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="thead-custom">
@@ -280,69 +218,49 @@
                                     <th>Kota Tujuan</th>
                                     <th>Kota Asal</th>
                                     <th>Harga</th>
-
                                     <th>Tanggal Pembelian</th>
                                     <th>Status</th>
-
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for histori in histori_pesanan %}
-
                                 <tr>
                                     <td>{{ histori.new_id }}</td>
                                     <td>{{ histori.no_resi }}</td>
-
                                     <td>{{ histori.kota_tujuan }}</td>
-
                                     <td>{{ histori.kota_asal }}</td>
-                                    <td>{{ histori.harga_pengiriman }}</td>
+                                    <td>{{ format_harga(histori.harga_pengiriman) }}</td>
                                     <td>{{ histori.tanggal_pembelian }}</td>
-
                                     <td>{{ histori.status }}</td>
-
                                     <td>
-
                                         <form action="{{ url_for('delete_history', id=histori.new_id) }}" method="POST" style="display:inline;">
                                             <button type="submit" class="btn red-btn">Hapus</button>
-
                                         </form>
-
                                     </td>
                                 </tr>
                                 {% endfor %}
-
                             </tbody>
-
                         </table>
-
                     </div>
                 </div>
-
             </div>
-
         </div>      
 
-        <script src="static/js/jquery-3.3.1.min.js"></script>
-        <script src="static/js/jquery-migrate-3.0.1.min.js"></script>
-        <script src="static/js/jquery-ui.js"></script>
-
-        <script src="static/js/popper.min.js"></script>
-        <script src="static/js/bootstrap.min.js"></script>
-        <script src="static/js/owl.carousel.min.js"></script>
-        <script src="static/js/jquery.stellar.min.js"></script>
-
-        <script src="static/js/jquery.countdown.min.js"></script>
-
-        <script src="static/js/jquery.magnific-popup.min.js"></script>
-        <script src="static/js/bootstrap-datepicker.min.js"></script>
-        <script src="static/js/aos.js"></script>
-        <script src="static/js/main.js"></script>
+        <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery-migrate-3.0.1.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery.stellar.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery.countdown.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap-datepicker.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/aos.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
         <script>
-
             function filterData() {
-
                 var filter = document.getElementById('filter').value;
                 document.getElementById('pesanan-section').style.display = (filter === 'pesanan' || filter === 'all') ? 'block' : 'none';
                 document.getElementById('pengiriman-section').style.display = (filter === 'pengiriman' || filter === 'all') ? 'block' : 'none';

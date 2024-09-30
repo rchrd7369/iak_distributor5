@@ -69,7 +69,7 @@ def cek_harga():
     data = request.get_json()  # Menerima data dalam format JSON
     kota_tujuan = data.get('kota_tujuan')
     kota_asal = data.get('kota_asal')
-    berat = int(data.get('berat', 0))
+    berat = float(data.get('berat', 0))
     id_log = data.get('id_log')
 
     # Perhitungan ongkos kirim berdasarkan jarak dan berat
@@ -238,13 +238,22 @@ def admin():
     ongkos_list = [{'new_id': doc.id, **doc.to_dict()} for doc in ongkos_docs]
     histori_list = [{'new_id': doc.id, **doc.to_dict()} for doc in histori_docs]
 
+    for ongkos in ongkos_list:
+        ongkos['harga_pengiriman'] = float(ongkos['harga_pengiriman'])
+
+    for histori in histori_list:
+        histori['harga_pengiriman'] = float(histori['harga_pengiriman'])
+
     return render_template(
         'admin.html', 
         pesanan=pesanan_list, 
         ongkos=ongkos_list, 
         histori_pesanan=histori_list, 
-        status_list=STATUS_LIST
+        status_list=STATUS_LIST,
+        format_harga=format_harga
     )
+def format_harga(harga):
+    return f"Rp {harga:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 @app.route('/delete_history/<id>', methods=['POST'])
 def delete_history(id):
